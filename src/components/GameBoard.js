@@ -23,23 +23,25 @@ export class GameBoard extends Component {
     return (
       <>
         <div>GameBoard</div>
-        {/* <div className="board">
-          {this.state.board.map((row,j) => {
-            return (
-              <div key={j}>
-                {row.map((column,i) => {
-                  return (
-                    <span
+        <div>something here</div>
+        {this.state.board.map((row, j) => {
+          return (
+            <div key={j}>
+              {row.map((column, i) => {
+                return (
+                  <span
                     key={i}
                     className="box"
-                    onClick={() => this.setCheck(i,j)}
+                    onClick={() => this.setCheck(i, j)}
                     onContextMenu={event => this.setFlag(event, i, j)}
-                    >
-                    {this.state.board[i][j]} {`${""}`}
-                    </span>
-                  );
-                })}
-        </div> */}
+                  >
+                    {this.state.board[i][j]} {`${''}`}
+                  </span>
+                )
+              })}
+            </div>
+          )
+        })}
       </>
     )
   }
@@ -47,7 +49,7 @@ export class GameBoard extends Component {
 
 export default GameBoard
 
-//   <main>something here
+//   <main>
 //     <table>
 //       <tbody>
 //         {this.state.board.map((col,i) => {
