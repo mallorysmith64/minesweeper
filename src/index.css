@@ -1,5 +1,7 @@
 :root {
-  font: 16px / 1 sans-serif;
+  font: 2em / 1 sans-serif;
+  --gray: rgb(192, 192, 192);
+  --dark-gray: 4px solid rgb(123, 123, 123);
 }
 
 html {
@@ -9,18 +11,29 @@ html {
 body {
   margin: 0;
   min-height: 100%;
+  background-color: green;
 }
 
 td {
   padding: 1rem;
-  margin: 1rem;
-  background-color: rgb(192, 192, 192);
-  border: 5px solid rgb(123, 123, 123);
+  background-color: var(--gray);
+  border: var(--dark-gray);
   text-align: center;
-  height: 3rem;
-  width: 3rem;
+  height: 1rem;
+  width: 1rem;
 }
 
-h1 {
+.table {
+  display: flex;
+  justify-content: center;
+}
+
+.reset-button {
+  display: flex;
+  list-style: none;
+  width: 4em;
+}
+
+.page-title {
   text-align: center;
 }

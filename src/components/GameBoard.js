@@ -6,14 +6,14 @@ export class GameBoard extends Component {
   state = {
     //trying out multi-dimensional array instead of an empty array
     board: [
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '']
     ],
     difficulty: 0, //Easy - 8x8, 10 mines
     id: 0
@@ -82,8 +82,10 @@ export class GameBoard extends Component {
   render() {
     return (
       <>
-        <h1>Minesweeper</h1>
-        <main>
+        <nav className="page-title">
+          <h1>Bomb Sniffer!</h1>
+        </nav>
+        <main className="table">
           <table>
             <tbody>
               {this.state.board.map((col, i) => {
@@ -108,8 +110,10 @@ export class GameBoard extends Component {
               })}
             </tbody>
           </table>
-          <button onClick={this.makeGame}>Reset Game</button>
         </main>
+        <li className="reset-button">
+          <button onClick={this.makeGame}>Reset Game</button>
+        </li>
       </>
     )
   }
