@@ -24,8 +24,19 @@ export class GameBoard extends Component {
     })
   }
 
+  //get id for game
+  apiGetGame = async minesweeperData => {
+    const result = await axios.post(
+      `http://minesweeper-api.herokuapp.com/games/${this.state.id}`
+    )
+    this.setState({
+      board: result.data.board
+    })
+    console.log(result)
+  }
+
   //left click for checks
-  checkGame = async minesweeperData => {
+  ApiCheckGame = async minesweeperData => {
     const result = await axios.post(
       `http://minesweeper-api.herokuapp.com/games/${this.state.id}/check`
     )
@@ -110,22 +121,3 @@ class Cell extends Component {
   }
 }
 export default GameBoard
-
-/* {this.state.board.map((row, j) => {
-    return (
-      <div key={j}>
-        {row.map((column, i) => {
-          return (
-            <span
-              key={i}
-              className="box"
-              onClick={() => this.setCheck(i, j)}
-              onContextMenu={event => this.setFlag(event, i, j)}
-            >
-              {this.state.board[i][j]} {`${''}`}
-            </span>
-          )
-        })}
-      </div>
-    )
-  })} */
