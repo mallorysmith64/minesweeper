@@ -11,6 +11,7 @@ export class GameBoard extends Component {
 
   //call api to start game
   componentDidMount() {
+    console.log('mounting')
     axios({
       method: 'post',
       url: 'http://minesweeper-api.herokuapp.com/games'
@@ -24,7 +25,7 @@ export class GameBoard extends Component {
     })
   }
 
-  //get id for game
+  //call api to get id for game
   apiGetGame = async minesweeperData => {
     const result = await axios.post(
       `http://minesweeper-api.herokuapp.com/games/${this.state.id}`
@@ -35,8 +36,8 @@ export class GameBoard extends Component {
     console.log(result)
   }
 
-  //left click for checks
-  ApiCheckGame = async minesweeperData => {
+  //api get left click for checks
+  apiCheckGame = async minesweeperData => {
     const result = await axios.post(
       `http://minesweeper-api.herokuapp.com/games/${this.state.id}/check`
     )
@@ -46,8 +47,8 @@ export class GameBoard extends Component {
     console.log('checked', result)
   }
 
-  //right click for flags
-  flagGame = async minesweeperData => {
+  //api get right click for flags
+  apiFlagGame = async minesweeperData => {
     const result = await axios.post(
       `http://minesweeper-api.herokuapp.com/games/${this.state.id}/flag`
     )
@@ -57,17 +58,19 @@ export class GameBoard extends Component {
     console.log('flagged', result)
   }
 
-  //todo
+  // //handle left click
   // leftClick = (x, y) => {
   //   console.log('left click', x, y) //console left clicks for checks
-  //   this.checkGame //api call
+  //   this.apiCheckGame //api call
   // }
 
+  // //handle right click
   // rightClick = (x, y) => {
   //   console.log('right click', x, y) //console right clicks for flags
-  //   this.FlagGame //api call
+  //   this.apiFlagGame //api call
   // }
 
+  //reset board game
   reset = () => {
     this.setState({
       board: [],
@@ -92,8 +95,8 @@ export class GameBoard extends Component {
                         <Cell
                           key={j}
                           display={this.state.board[i][j]}
-                          handleLeftClick={() => this.cellLeftClicked(i, j)}
-                          handleRightClick={() => this.cellRightClicked(i, j)}
+                          handleLeftClick={() => this.leftClicked(i, j)}
+                          handleRightClick={() => this.rightClicked(i, j)}
                         />
                       )
                     })}
