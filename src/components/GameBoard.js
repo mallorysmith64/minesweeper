@@ -9,6 +9,7 @@ export class GameBoard extends Component {
     id: 0
   }
 
+  //call api to start game
   componentDidMount() {
     axios({
       method: 'post',
@@ -17,21 +18,52 @@ export class GameBoard extends Component {
       console.log('start of game!', result)
       this.setState({
         // state: result,
-        board: result.data.board
+        board: result.data.board,
+        id: result.data.board
       })
     })
+  }
+
+  //left click for checks
+  checkGame = async minesweeperData => {
+    const result = await axios.post(
+      `http://minesweeper-api.herokuapp.com/games/${this.state.id}/check`
+    )
+    this.setState({
+      board: result.data.board
+    })
+    console.log('checked', result)
+  }
+
+  //right click for flags
+  flagGame = async minesweeperData => {
+    const result = await axios.post(
+      `http://minesweeper-api.herokuapp.com/games/${this.state.id}/flag`
+    )
+    this.setState({
+      board: result.data.board
+    })
+    console.log('flagged', result)
   }
 
   //todo
   // leftClick = (x, y) => {
   //   console.log('left click', x, y) //console left clicks for checks
-  //   this.CheckGame //api call
+  //   this.checkGame //api call
   // }
 
   // rightClick = (x, y) => {
   //   console.log('right click', x, y) //console right clicks for flags
   //   this.FlagGame //api call
   // }
+
+  reset = () => {
+    this.setState({
+      board: [],
+      difficulty: 0,
+      id: 0
+    })
+  }
 
   render() {
     return (
@@ -67,10 +99,16 @@ export class GameBoard extends Component {
 
 class Cell extends Component {
   render() {
-    return <td onClick={this.props.handleClick}>{this.props.display}</td>
+    return (
+      <td
+        onClick={this.props.handleLeftClick}
+        onContextMenu={this.handleRightClick}
+      >
+        {this.props.display}
+      </td>
+    )
   }
 }
-
 export default GameBoard
 
 /* {this.state.board.map((row, j) => {
