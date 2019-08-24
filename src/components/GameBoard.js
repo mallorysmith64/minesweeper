@@ -4,7 +4,17 @@ import Cell from './Cell'
 
 export class GameBoard extends Component {
   state = {
-    board: [],
+    //trying out multi-dimensional array instead of an empty array
+    board: [
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+    ],
     difficulty: 0, //Easy - 8x8, 10 mines
     id: 0
   }
@@ -16,7 +26,7 @@ export class GameBoard extends Component {
     )
     this.setState({
       board: result.data.board,
-      id: result.data.board
+      id: result.data.id
     })
     console.log('start game', result)
   }
