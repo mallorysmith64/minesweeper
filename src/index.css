@@ -1,7 +1,7 @@
 :root {
   font: 2em / 1 sans-serif;
-  --gray: rgb(192, 192, 192);
-  --dark-gray: 4px solid rgb(123, 123, 123);
+  --light-gray: rgb(192, 192, 192);
+  --gray: 5px solid rgb(123, 123, 123);
 }
 
 html {
@@ -11,13 +11,13 @@ html {
 body {
   margin: 0;
   min-height: 100%;
-  background-color: green;
+  background-color: rgb(62, 90, 122);
 }
 
 td {
   padding: 1rem;
-  background-color: var(--gray);
-  border: var(--dark-gray);
+  background-color: var(--light-gray);
+  border: var(--gray);
   text-align: center;
   height: 1rem;
   width: 1rem;
@@ -29,11 +29,11 @@ td {
 }
 
 .reset-button {
-  display: flex;
   list-style: none;
   width: 4em;
 }
 
 .page-title {
   text-align: center;
+  color: rgba(255, 255, 255, 0.849);
 }

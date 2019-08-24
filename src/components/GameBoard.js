@@ -109,11 +109,11 @@ export class GameBoard extends Component {
                 )
               })}
             </tbody>
+            <li className="reset-button">
+              <button onClick={this.makeGame}>Reset Game</button>
+            </li>
           </table>
         </main>
-        <li className="reset-button">
-          <button onClick={this.makeGame}>Reset Game</button>
-        </li>
       </>
     )
   }
