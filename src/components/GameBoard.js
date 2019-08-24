@@ -22,39 +22,57 @@ export class GameBoard extends Component {
   render() {
     return (
       <>
-        <div>GameBoard</div>
-        <div>something here</div>
-        {this.state.board.map((row, j) => {
-          return (
-            <div key={j}>
-              {row.map((column, i) => {
+        <h1>Minesweeper</h1>
+        <button onClick={this.reset}>reset</button>
+        <main>
+          <table>
+            <tbody>
+              {this.state.board.map((col, i) => {
                 return (
-                  <span
-                    key={i}
-                    className="box"
-                    onClick={() => this.setCheck(i, j)}
-                    onContextMenu={event => this.setFlag(event, i, j)}
-                  >
-                    {this.state.board[i][j]} {`${''}`}
-                  </span>
+                  <tr key={i}>
+                    {col.map((row, j) => {
+                      return (
+                        <Cell
+                          key={j}
+                          display={this.state.board[i][j]}
+                          handleClick={() => this.cellClicked(i, j)}
+                        />
+                      )
+                    })}
+                  </tr>
                 )
               })}
-            </div>
-          )
-        })}
+            </tbody>
+          </table>
+        </main>
       </>
     )
   }
 }
 
+class Cell extends Component {
+  render() {
+    return <td onClick={this.props.handleClick}>{this.props.display}</td>
+  }
+}
+
 export default GameBoard
 
-//   <main>
-//     <table>
-//       <tbody>
-//         {this.state.board.map((col,i) => {
-//         }}
-//       </tbody>
-//     </table>
-//   </main>
-// }
+/* {this.state.board.map((row, j) => {
+    return (
+      <div key={j}>
+        {row.map((column, i) => {
+          return (
+            <span
+              key={i}
+              className="box"
+              onClick={() => this.setCheck(i, j)}
+              onContextMenu={event => this.setFlag(event, i, j)}
+            >
+              {this.state.board[i][j]} {`${''}`}
+            </span>
+          )
+        })}
+      </div>
+    )
+  })} */
