@@ -95,8 +95,8 @@ export class GameBoard extends Component {
                         <Cell
                           key={j}
                           display={this.state.board[i][j]}
-                          handleLeftClick={() => this.leftClicked(i, j)}
-                          handleRightClick={() => this.rightClicked(i, j)}
+                          handleLeftClick={() => this.leftClick(i, j)}
+                          handleRightClick={() => this.rightClick(i, j)}
                         />
                       )
                     })}
