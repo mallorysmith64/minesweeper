@@ -3,26 +3,41 @@ import axios from 'axios'
 
 export class GameBoard extends Component {
   state = {
-    // currentPlayer: 'X',
     board: [],
     difficulty: 0, //Easy - 8x8, 10 mines
     id: 0
   }
 
-  //call api to start game
-  componentDidMount() {
-    console.log('mounting')
-    axios({
-      method: 'post',
-      url: 'http://minesweeper-api.herokuapp.com/games'
-    }).then(result => {
-      console.log('start of game!', result)
-      this.setState({
-        // state: result,
-        board: result.data.board,
-        id: result.data.board
-      })
+  //did not like this way because i had difficulty calling this
+  // componentDidMount() {
+  //   console.log('mounting')
+  //   axios({
+  //     method: 'post',
+  //     url: 'http://minesweeper-api.herokuapp.com/games'
+  //   }).then(result => {
+  //     console.log('start of game!', result)
+  //     this.setState({
+  //       // state: result,
+  //       board: result.data.board,
+  //       id: result.data.board
+  //     })
+  //   })
+  // }
+
+  //call api to make game
+  makeGame = async () => {
+    const result = await axios.post(
+      `http://minesweeper-api.herokuapp.com/games`
+    )
+    this.setState({
+      board: result.data.board,
+      id: result.data.board
     })
+    console.log('start game', result)
+  }
+
+  componentDidMount() {
+    this.makeGame()
   }
 
   //call api to get id for game
@@ -33,14 +48,19 @@ export class GameBoard extends Component {
     this.setState({
       board: result.data.board
     })
-    console.log(result)
+    console.log('received id', result)
   }
 
   //api get left click for checks
-  apiCheckGame = async minesweeperData => {
+  apiCheckGame = async (x, y) => {
     const result = await axios.post(
-      `http://minesweeper-api.herokuapp.com/games/${this.state.id}/check`
+      `http://minesweeper-api.herokuapp.com/games/${this.state.id}/check`,
+      {
+        row: x,
+        col: y
+      }
     )
+    console.log(x, y)
     this.setState({
       board: result.data.board
     })
@@ -48,42 +68,47 @@ export class GameBoard extends Component {
   }
 
   //api get right click for flags
-  apiFlagGame = async minesweeperData => {
+  apiFlagGame = async (x, y) => {
     const result = await axios.post(
-      `http://minesweeper-api.herokuapp.com/games/${this.state.id}/flag`
+      `http://minesweeper-api.herokuapp.com/games/${this.state.id}/flag`,
+      {
+        row: x,
+        col: y
+      }
     )
+    console.log(x, y)
     this.setState({
       board: result.data.board
     })
     console.log('flagged', result)
   }
 
-  // //handle left click
-  // leftClick = (x, y) => {
-  //   console.log('left click', x, y) //console left clicks for checks
-  //   this.apiCheckGame //api call
-  // }
+  //handle left click
+  leftClick = (x, y) => {
+    console.log('left click', x, y) //console left clicks for checks
+    this.apiCheckGame() //api call
+  }
 
-  // //handle right click
-  // rightClick = (x, y) => {
-  //   console.log('right click', x, y) //console right clicks for flags
-  //   this.apiFlagGame //api call
-  // }
+  //handle right click
+  rightClick = (x, y) => {
+    console.log('right click', x, y) //console right clicks for flags
+    this.apiFlagGame() //api call
+  }
 
   //reset board game
-  reset = () => {
-    this.setState({
-      board: [],
-      difficulty: 0,
-      id: 0
-    })
-  }
+  // reset = () => {
+  //   this.setState({
+  //     board: [],
+  //     difficulty: 0,
+  //     id: 0
+  //   })
+  //   console.log('reset game')
+  // }
 
   render() {
     return (
       <>
         <h1>Minesweeper</h1>
-        <button onClick={this.reset}>reset</button>
         <main>
           <table>
             <tbody>
@@ -106,6 +131,7 @@ export class GameBoard extends Component {
             </tbody>
           </table>
         </main>
+        <button onClick={this.makeGame}>Reset Game</button>
       </>
     )
   }
