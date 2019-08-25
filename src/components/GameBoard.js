@@ -40,6 +40,21 @@ export class GameBoard extends Component {
     console.log('received id', result)
   }
 
+  //easiest mode
+  easy = () => {
+    this.setState({ difficulty: 0 }, this.makeGame)
+  }
+
+  //medium mode
+  medium = () => {
+    this.setState({ difficulty: 1 }, this.makeGame)
+  }
+
+  //hardiest mode
+  hard = () => {
+    this.setState({ difficulty: 2 }, this.makeGame)
+  }
+
   //api get left click for checks
   apiCheckGame = async (x, y) => {
     const result = await axios.post(
@@ -114,12 +129,22 @@ export class GameBoard extends Component {
         <nav className="page-title">
           <h1>Bomb Sniffer!</h1>
         </nav>
+        <section className="choose-difficulty">
+          <h3> Choose your difficulty</h3>
+        </section>
+        <section className="difficulty-btn">
+          <button onClick={this.easy}>Easy Mode</button>
+          <button onClick={this.medium}>Medium Mode</button>
+          <button onClick={this.hard}>Hard mode</button>
+        </section>
         <section className="game-over">
           <h2>{this.state.state}</h2>
         </section>
-        <li className="reset-button">
-          <button onClick={this.makeGame}>Reset Game</button>
-        </li>
+        <section className="reset-btn">
+          <li>
+            <button onClick={this.makeGame}>Reset Game</button>
+          </li>
+        </section>
         <main className="table">
           <table>
             <tbody>

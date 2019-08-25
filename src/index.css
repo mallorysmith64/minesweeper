@@ -1,7 +1,7 @@
 :root {
   font: 2em / 1 sans-serif;
   --light-gray: rgb(192, 192, 192);
-  --gray: 5px solid rgb(123, 123, 123);
+  --gray: rgb(123, 123, 123);
 }
 
 html {
@@ -12,12 +12,13 @@ body {
   margin: 0;
   min-height: 100%;
   background-color: rgb(62, 90, 122);
+  text-align: center;
 }
 
 td {
   padding: 1rem;
   background-color: var(--light-gray);
-  border: var(--gray);
+  border: 5px solid var(--gray);
   text-align: center;
   height: 1rem;
   width: 1rem;
@@ -28,17 +29,25 @@ td {
   justify-content: center;
 }
 
-.reset-button {
+.reset-btn {
   list-style: none;
-  width: 4em;
+  margin-bottom: 1em;
+}
+.page-title {
+  font-size: 1.5em;
+  color: var(--light-gray);
 }
 
-.page-title {
-  text-align: center;
-  color: rgba(255, 255, 255, 0.849);
+.choose-difficulty {
+  font-size: 1.3em;
+  color: var(--gray);
+}
+
+.difficulty-btn {
+  display: flex;
+  justify-content: center;
 }
 
 .game-over {
-  text-align: center;
-  color: yellow;
+  color: rgb(199, 241, 8);
 }
