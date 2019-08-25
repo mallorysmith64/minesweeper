@@ -4,20 +4,11 @@ import Cell from './Cell'
 
 export class GameBoard extends Component {
   state = {
-    board: [
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', '']
-    ],
+    board: [],
     difficulty: 0, //Easy - 8x8, 10 mines
     id: 0,
-    // mineCount: this.props.mines
-    message: '', //display winner and loser message
+    //display winner and loser message
+    message: '',
     status: ''
   }
 
@@ -60,8 +51,10 @@ export class GameBoard extends Component {
     )
     console.log('checked', result)
     this.setState({
-      board: result.data.board
+      board: result.data.board,
+      state: result.data.state
     })
+    console.log(this.state.state)
     this.gameResults()
   }
 
@@ -148,10 +141,10 @@ export class GameBoard extends Component {
                 )
               })}
             </tbody>
-            <li className="reset-button">
-              <button onClick={this.makeGame}>Reset Game</button>
-            </li>
           </table>
+          <li className="reset-button">
+            <button onClick={this.makeGame}>Reset Game</button>
+          </li>
         </main>
       </>
     )
