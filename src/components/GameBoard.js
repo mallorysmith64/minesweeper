@@ -16,7 +16,8 @@ export class GameBoard extends Component {
       ['', '', '', '', '', '', '', '']
     ],
     difficulty: 0, //Easy - 8x8, 10 mines
-    id: 0
+    id: 0,
+    status: ''
   }
 
   //call api to make game
@@ -56,7 +57,7 @@ export class GameBoard extends Component {
         col: y
       }
     )
-    console.log(x, y)
+    // console.log(x, y)
     this.setState({
       board: result.data.board
     })
@@ -79,12 +80,29 @@ export class GameBoard extends Component {
     console.log('flagged', result)
   }
 
+  gameResults = async () => {
+    if (this.state.status === 'lost') {
+      this.setState({
+        status: 'You lost!'
+      })
+    } else if (this.state.status === 'won') {
+      this.setState({
+        status: 'You win!'
+      })
+    } else
+      this.setState({
+        status: 'keep playing!'
+      })
+  }
+
   render() {
     return (
       <>
         <nav className="page-title">
           <h1>Bomb Sniffer!</h1>
         </nav>
+        {/* <section displayResults={this.state.status}></section>
+        <h2 className="game-over">{this.props.displayResults}</h2> */}
         <main className="table">
           <table>
             <tbody>
@@ -120,41 +138,3 @@ export class GameBoard extends Component {
 }
 
 export default GameBoard
-
-//did not like this way because i had difficulty calling this
-// componentDidMount() {
-//   console.log('mounting')
-//   axios({
-//     method: 'post',
-//     url: 'http://minesweeper-api.herokuapp.com/games'
-//   }).then(result => {
-//     console.log('start of game!', result)
-//     this.setState({
-//       // state: result,
-//       board: result.data.board,
-//       id: result.data.board
-//     })
-//   })
-// }
-
-//handle left click
-// leftClick = (x, y) => {
-//   console.log('left click', x, y) //console left clicks for checks
-//   this.apiCheckGame() //api call
-// }
-
-// //handle right click
-// rightClick = (x, y) => {
-//   console.log('right click', x, y) //console right clicks for flags
-//   this.apiFlagGame() //api call
-// }
-
-//reset board game
-// reset = () => {
-//   this.setState({
-//     board: [],
-//     difficulty: 0,
-//     id: 0
-//   })
-//   console.log('reset game')
-// }
