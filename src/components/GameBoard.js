@@ -4,7 +4,6 @@ import Cell from './Cell'
 
 export class GameBoard extends Component {
   state = {
-    //trying out multi-dimensional array instead of an empty array
     board: [
       ['', '', '', '', '', '', '', ''],
       ['', '', '', '', '', '', '', ''],
@@ -17,7 +16,8 @@ export class GameBoard extends Component {
     ],
     difficulty: 0, //Easy - 8x8, 10 mines
     id: 0,
-    status: ''
+    // mineCount: this.props.mines
+    message: '' //display winner and loser message
   }
 
   //call api to make game
@@ -80,20 +80,39 @@ export class GameBoard extends Component {
     console.log('flagged', result)
   }
 
-  gameResults = async () => {
-    if (this.state.status === 'lost') {
-      this.setState({
-        status: 'You lost!'
-      })
-    } else if (this.state.status === 'won') {
-      this.setState({
-        status: 'You win!'
-      })
-    } else
-      this.setState({
-        status: 'keep playing!'
-      })
-  }
+  // renderSymbols = (i, j) => {
+  //   let symbols = ''
+  //   if (this.state.board[i][j] === 'F') {
+  //     symbols = 'flag'
+  //   }
+  //   return (
+  //     <td
+  //     className={`squares ${symbols}`}
+  //     key={j}
+  //     onClick={() => this.}
+  //   )
+  // }
+
+  // changeSymbols(i, j) {
+  //   if (this.state.game.board[i][j] === 'F') {
+  //     return <span role="img">🚩</span>
+  //   }
+  // }
+
+  // gameResults = async () => {
+  //   if (this.state.gameStatus === 'lost') {
+  //     this.setState({
+  //       message: 'You lost!'
+  //     })
+  //   } else if (this.state.gameStatus === 'won') {
+  //     this.setState({
+  //       message: 'You win!'
+  //     })
+  //   } else
+  //     this.setState({
+  //       message: 'keep playing!'
+  //     })
+  // }
 
   render() {
     return (
@@ -101,8 +120,9 @@ export class GameBoard extends Component {
         <nav className="page-title">
           <h1>Bomb Sniffer!</h1>
         </nav>
-        {/* <section displayResults={this.state.status}></section>
-        <h2 className="game-over">{this.props.displayResults}</h2> */}
+        {/* <section displayResults={this.state.gameResults}>
+          <h2 className="game-over">{this.props.displayResults}</h2>
+        </section> */}
         <main className="table">
           <table>
             <tbody>
