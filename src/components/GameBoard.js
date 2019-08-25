@@ -17,7 +17,8 @@ export class GameBoard extends Component {
     difficulty: 0, //Easy - 8x8, 10 mines
     id: 0,
     // mineCount: this.props.mines
-    message: '' //display winner and loser message
+    message: '', //display winner and loser message
+    status: ''
   }
 
   //call api to make game
@@ -57,11 +58,11 @@ export class GameBoard extends Component {
         col: y
       }
     )
-    // console.log(x, y)
+    console.log('checked', result)
     this.setState({
       board: result.data.board
     })
-    console.log('checked', result)
+    this.gameResults()
   }
 
   //api get right click for flags
@@ -99,20 +100,20 @@ export class GameBoard extends Component {
   //   }
   // }
 
-  // gameResults = async () => {
-  //   if (this.state.gameStatus === 'lost') {
-  //     this.setState({
-  //       message: 'You lost!'
-  //     })
-  //   } else if (this.state.gameStatus === 'won') {
-  //     this.setState({
-  //       message: 'You win!'
-  //     })
-  //   } else
-  //     this.setState({
-  //       message: 'keep playing!'
-  //     })
-  // }
+  gameResults = async () => {
+    if (this.state.status === 'lost') {
+      this.setState({
+        message: 'You lost!'
+      })
+    } else if (this.state.status === 'won') {
+      this.setState({
+        message: 'You win!'
+      })
+    } else
+      this.setState({
+        message: 'keep playing!'
+      })
+  }
 
   render() {
     return (
@@ -120,9 +121,9 @@ export class GameBoard extends Component {
         <nav className="page-title">
           <h1>Bomb Sniffer!</h1>
         </nav>
-        {/* <section displayResults={this.state.gameResults}>
-          <h2 className="game-over">{this.props.displayResults}</h2>
-        </section> */}
+        <section className="game-over">
+          <h2> something goes here</h2>
+        </section>
         <main className="table">
           <table>
             <tbody>

@@ -37,3 +37,8 @@ td {
   text-align: center;
   color: rgba(255, 255, 255, 0.849);
 }
+
+.game-over {
+  text-align: center;
+  color: yellow;
+}
