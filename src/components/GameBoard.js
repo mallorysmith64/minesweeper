@@ -54,7 +54,7 @@ export class GameBoard extends Component {
       board: result.data.board,
       state: result.data.state
     })
-    console.log(this.state.state)
+    console.log(this.state.state) //2nd state found in the console
     this.gameResults()
   }
 
@@ -104,7 +104,7 @@ export class GameBoard extends Component {
       })
     } else
       this.setState({
-        message: 'keep playing!'
+        message: 'Keep playing!'
       })
   }
 
@@ -115,8 +115,11 @@ export class GameBoard extends Component {
           <h1>Bomb Sniffer!</h1>
         </nav>
         <section className="game-over">
-          <h2> something goes here</h2>
+          <h2>{this.state.state}</h2>
         </section>
+        <li className="reset-button">
+          <button onClick={this.makeGame}>Reset Game</button>
+        </li>
         <main className="table">
           <table>
             <tbody>
@@ -142,9 +145,6 @@ export class GameBoard extends Component {
               })}
             </tbody>
           </table>
-          <li className="reset-button">
-            <button onClick={this.makeGame}>Reset Game</button>
-          </li>
         </main>
       </>
     )
