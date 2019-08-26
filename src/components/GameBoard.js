@@ -13,14 +13,15 @@ export class GameBoard extends Component {
   }
 
   //call api to make game
-  makeGame = async () => {
+  makeGame = async (difficulty = 0) => {
     const result = await axios.post(
-      `http://minesweeper-api.herokuapp.com/games`
+      `http://minesweeper-api.herokuapp.com/games`,
+      { difficulty: difficulty }
     )
     this.setState({
       board: result.data.board,
       id: result.data.id,
-      difficulty: this.state.difficulty
+      difficulty: difficulty
     })
     console.log('start game', result)
   }
@@ -42,22 +43,23 @@ export class GameBoard extends Component {
   // }
 
   //easiest mode in game
-  easy = async () => {
-    this.setState({ difficulty: 0 }, this.makeGame)
-    console.log('easy mode')
+  setDifficulty = async difficulty => {
+    this.setState({ difficulty: difficulty }, this.makeGame)
+    console.log('difficulty', difficulty)
+    this.makeGame(difficulty)
   }
 
   //medium mode in game
-  medium = async () => {
-    this.setState({ difficulty: 1 }, this.makeGame)
-    console.log('medium mode')
-  }
+  // medium = async () => {
+  //   this.setState({ difficulty: 1 }, this.makeGame)
+  //   console.log('medium mode')
+  // }
 
-  //hardiest mode in game
-  hard = async () => {
-    this.setState({ difficulty: 2 }, this.makeGame)
-    console.log('hard mode')
-  }
+  // //hardiest mode in game
+  // hard = async () => {
+  //   this.setState({ difficulty: 2 }, this.makeGame)
+  //   console.log('hard mode')
+  // }
 
   //api get left click for checks
   apiCheckGame = async (x, y) => {
@@ -91,6 +93,10 @@ export class GameBoard extends Component {
       board: result.data.board
     })
     console.log('flagged', result)
+  }
+
+  resetGame = () => {
+    this.makeGame(0)
   }
 
   // renderSymbols = (i, j) => {
@@ -137,16 +143,34 @@ export class GameBoard extends Component {
           <h3> Choose your difficulty</h3>
         </section>
         <section className="difficulty-btn">
-          <button onClick={this.easy}>Easy Mode</button>
-          <button onClick={this.medium}>Medium Mode</button>
-          <button onClick={this.hard}>Hard mode</button>
+          <button
+            onClick={() => {
+              this.setDifficulty(0)
+            }}
+          >
+            Easy Mode
+          </button>
+          <button
+            onClick={() => {
+              this.setDifficulty(1)
+            }}
+          >
+            Medium Mode
+          </button>
+          <button
+            onClick={() => {
+              this.setDifficulty(2)
+            }}
+          >
+            Hard mode
+          </button>
         </section>
         <section className="game-over">
           <h2>{this.state.state}</h2>
         </section>
         <section className="reset-btn">
           <li>
-            <button onClick={this.makeGame}>Reset Game</button>
+            <button onClick={this.resetGame}>Reset Game</button>
           </li>
         </section>
         <main className="table">
