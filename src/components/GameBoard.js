@@ -125,7 +125,7 @@ export class GameBoard extends Component {
         </section>
         <section className="reset-btn">
           <li>
-            <button onClick={this.resetGame}>Reset Game</button>
+            <button onClick={this.resetGame}>Play Again</button>
           </li>
         </section>
         <main className="table">
