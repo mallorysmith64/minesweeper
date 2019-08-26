@@ -19,40 +19,44 @@ export class GameBoard extends Component {
     )
     this.setState({
       board: result.data.board,
-      id: result.data.id
+      id: result.data.id,
+      difficulty: this.state.difficulty
     })
     console.log('start game', result)
   }
 
-  //should I put async before this?
   componentDidMount() {
     this.makeGame()
   }
 
   //call api to get id for game
-  apiGetGame = async () => {
-    const result = await axios.post(
-      `http://minesweeper-api.herokuapp.com/games/${this.state.id}`
-    )
-    this.setState({
-      board: result.data.board
-    })
-    console.log('received id', result)
-  }
+  // apiGetGame = async () => {
+  //   const result = await axios.post(
+  //     `http://minesweeper-api.herokuapp.com/games/${this.state.id}`
+  //   )
+  //   this.setState({
+  //     board: result.data.board,
+  //     id: result.data.id
+  //   })
+  //   console.log('received id', result)
+  // }
 
-  //easiest mode
-  easy = () => {
+  //easiest mode in game
+  easy = async () => {
     this.setState({ difficulty: 0 }, this.makeGame)
+    console.log('easy mode')
   }
 
-  //medium mode
-  medium = () => {
+  //medium mode in game
+  medium = async () => {
     this.setState({ difficulty: 1 }, this.makeGame)
+    console.log('medium mode')
   }
 
-  //hardiest mode
-  hard = () => {
+  //hardiest mode in game
+  hard = async () => {
     this.setState({ difficulty: 2 }, this.makeGame)
+    console.log('hard mode')
   }
 
   //api get left click for checks
