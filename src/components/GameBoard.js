@@ -5,9 +5,8 @@ import Cell from './Cell'
 export class GameBoard extends Component {
   state = {
     board: [],
-    difficulty: 0, //Easy - 8x8, 10 mines
+    difficulty: 0,
     id: 0,
-    //display winner and loser message
     message: '',
     status: ''
   }
@@ -30,38 +29,13 @@ export class GameBoard extends Component {
     this.makeGame()
   }
 
-  //call api to get id for game
-  // apiGetGame = async () => {
-  //   const result = await axios.post(
-  //     `http://minesweeper-api.herokuapp.com/games/${this.state.id}`
-  //   )
-  //   this.setState({
-  //     board: result.data.board,
-  //     id: result.data.id
-  //   })
-  //   console.log('received id', result)
-  // }
-
-  //easiest mode in game
   setDifficulty = async difficulty => {
     this.setState({ difficulty: difficulty }, this.makeGame)
     console.log('difficulty', difficulty)
     this.makeGame(difficulty)
   }
 
-  //medium mode in game
-  // medium = async () => {
-  //   this.setState({ difficulty: 1 }, this.makeGame)
-  //   console.log('medium mode')
-  // }
-
-  // //hardiest mode in game
-  // hard = async () => {
-  //   this.setState({ difficulty: 2 }, this.makeGame)
-  //   console.log('hard mode')
-  // }
-
-  //api get left click for checks
+  //api call for left click/checks
   apiCheckGame = async (x, y) => {
     const result = await axios.post(
       `http://minesweeper-api.herokuapp.com/games/${this.state.id}/check`,
@@ -79,7 +53,7 @@ export class GameBoard extends Component {
     this.gameResults()
   }
 
-  //api get right click for flags
+  //api call for right click/flags
   apiFlagGame = async (x, y) => {
     const result = await axios.post(
       `http://minesweeper-api.herokuapp.com/games/${this.state.id}/flag`,
@@ -98,25 +72,6 @@ export class GameBoard extends Component {
   resetGame = () => {
     this.makeGame(0)
   }
-
-  // renderSymbols = (i, j) => {
-  //   let symbols = ''
-  //   if (this.state.board[i][j] === 'F') {
-  //     symbols = 'flag'
-  //   }
-  //   return (
-  //     <td
-  //     className={`squares ${symbols}`}
-  //     key={j}
-  //     onClick={() => this.}
-  //   )
-  // }
-
-  // changeSymbols(i, j) {
-  //   if (this.state.game.board[i][j] === 'F') {
-  //     return <span role="img">🚩</span>
-  //   }
-  // }
 
   gameResults = async () => {
     if (this.state.status === 'lost') {
