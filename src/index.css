@@ -11,7 +11,7 @@ html {
 body {
   margin: 0;
   min-height: 100%;
-  background-color: rgb(62, 90, 122);
+  background-color: rgb(6, 138, 138);
   text-align: center;
 }
 
@@ -40,12 +40,17 @@ td {
 
 .choose-difficulty {
   font-size: 1em;
-  color: var(--gray);
+  color: var(--light-gray);
 }
 
 .difficulty-btn {
   display: flex;
   justify-content: center;
+  font-size:4em;
+}
+
+button {
+  padding:0.5em;
 }
 
 .game-over {
