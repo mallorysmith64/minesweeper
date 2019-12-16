@@ -33,6 +33,7 @@ td {
   list-style: none;
   margin-bottom: 1em;
 }
+
 .page-title {
   font-size: 1.2em;
   color: var(--light-gray);
@@ -43,6 +44,10 @@ td {
   color: var(--light-gray);
 }
 
+.choose-difficulty {
+  font-size: 1em;
+}
+
 .difficulty-btn {
   display: flex;
   justify-content: center;
@@ -51,9 +56,14 @@ td {
 
 button {
   padding:0.5em;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color:gold;
 }
 
 .game-over {
   font-size: 1em;
-  color: rgb(199, 241, 8);
+  color: gold;
 }
