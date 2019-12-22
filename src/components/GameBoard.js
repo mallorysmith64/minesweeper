@@ -14,7 +14,7 @@ export class GameBoard extends Component {
   //call api to make game
   makeGame = async (difficulty = 0) => {
     const result = await axios.post(
-      `http://minesweeper-api.herokuapp.com/games`,
+      `https://minesweeper-api.herokuapp.com/games`,
       { difficulty: difficulty }
     )
     this.setState({
@@ -38,7 +38,7 @@ export class GameBoard extends Component {
   //api call for left click/checks
   apiCheckGame = async (x, y) => {
     const result = await axios.post(
-      `http://minesweeper-api.herokuapp.com/games/${this.state.id}/check`,
+      `https://minesweeper-api.herokuapp.com/games/${this.state.id}/check`,
       {
         row: x,
         col: y
@@ -56,7 +56,7 @@ export class GameBoard extends Component {
   //api call for right click/flags
   apiFlagGame = async (x, y) => {
     const result = await axios.post(
-      `http://minesweeper-api.herokuapp.com/games/${this.state.id}/flag`,
+      `https://minesweeper-api.herokuapp.com/games/${this.state.id}/flag`,
       {
         row: x,
         col: y
