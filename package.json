@@ -27,7 +27,7 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "^3.1.1",
-    "serialize-javascript": "^2.1.2"
+    "serialize-javascript": "^3.1.0"
   },
   "homepage": "https://minesweeper-mallorysmith64.netlify.com"
 }
