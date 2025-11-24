@@ -18,6 +18,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "react-scripts": "^5.0.1",
     "stylelint": "^10.1.0",
     "stylelint-config-standard": "^18.3.0"
   },
@@ -26,8 +27,19 @@
     "json": "^10.0.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "^3.1.1",
     "serialize-javascript": "^3.1.0"
   },
-  "homepage": "https://minesweeper-mallorysmith64.netlify.com"
+  "homepage": "https://minesweeper-mallorysmith64.netlify.com",
+  "description": "**Welcome to Minesweeper!** :smiley:",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mallorysmith64/minesweeper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mallorysmith64/minesweeper/issues"
+  }
 }
