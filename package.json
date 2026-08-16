@@ -22,7 +22,9 @@
     "setup-deploy": "app-app --deploy && yarn deploy",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postdeploy": "echo 'Your site was deployed to https://minesweeper-mallorysmith64.netlify.com'"
+    "postdeploy": "echo 'Your site was deployed to https://minesweeper-mallorysmith64.netlify.com'",
+    "backend": "cd backend && ./.venv/bin/python3 app.py",
+    "dev": "concurrently -n frontend,backend -c blue,green \"npm run start\" \"npm run backend\""
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -33,6 +35,7 @@
   },
   "devDependencies": {
     "baseline-browser-mapping": "^2.11.14",
+    "concurrently": "^10.0.5",
     "react-scripts": "^5.0.1",
     "stylelint": "^10.1.0",
     "stylelint-config-standard": "^18.3.0"
