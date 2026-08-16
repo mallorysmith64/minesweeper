@@ -1,0 +1,227 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import random
+import uuid
+
+app = Flask(__name__)
+CORS(app)
+
+# Game difficulties: (rows, cols, mines)
+DIFFICULTIES = {
+    0: (8, 8, 10),      # Easy
+    1: (12, 12, 40),    # Medium
+    2: (16, 16, 100)    # Hard
+}
+
+# Store active games in memory
+games = {}
+
+@app.route("/")
+def hello_world():
+    return "<p>Hello, World!</p>"
+
+class MinesweeperGame:
+    def __init__(self, difficulty=0):
+        self.id = str(uuid.uuid4())
+        self.difficulty = difficulty
+        rows, cols, mines = DIFFICULTIES.get(difficulty, DIFFICULTIES[0])
+        self.rows = rows
+        self.cols = cols
+        self.num_mines = mines
+        
+        # Initialize boards
+        self.board = [[0 for _ in range(cols)] for _ in range(rows)]
+        self.revealed = [[False for _ in range(cols)] for _ in range(rows)]
+        self.flagged = [[False for _ in range(cols)] for _ in range(rows)]
+        self.state = 'playing'
+        
+        # Place mines
+        self._place_mines()
+        # Calculate numbers
+        self._calculate_numbers()
+    
+    def _place_mines(self):
+        """Randomly place mines on the board"""
+        mines_placed = 0
+        while mines_placed < self.num_mines:
+            row = random.randint(0, self.rows - 1)
+            col = random.randint(0, self.cols - 1)
+            if self.board[row][col] != 'M':
+                self.board[row][col] = 'M'
+                mines_placed += 1
+    
+    def _calculate_numbers(self):
+        """Calculate numbers for non-mine cells"""
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if self.board[i][j] != 'M':
+                    count = self._count_adjacent_mines(i, j)
+                    self.board[i][j] = count
+    
+    def _count_adjacent_mines(self, row, col):
+        """Count mines adjacent to a cell"""
+        count = 0
+        for i in range(max(0, row - 1), min(self.rows, row + 2)):
+            for j in range(max(0, col - 1), min(self.cols, col + 2)):
+                if self.board[i][j] == 'M':
+                    count += 1
+        return count
+    
+    def _get_display_board(self):
+        """Return the board as it should be displayed to the player"""
+        display = []
+        for i in range(self.rows):
+            row = []
+            for j in range(self.cols):
+                if self.flagged[i][j]:
+                    row.append('🚩')
+                elif not self.revealed[i][j]:
+                    row.append('□')
+                elif self.board[i][j] == 'M':
+                    row.append('💣')
+                elif self.board[i][j] == 0:
+                    row.append('0')
+                else:
+                    row.append(str(self.board[i][j]))
+            display.append(row)
+        return display
+    
+    def check_cell(self, row, col):
+        """Reveal a cell (left click)"""
+        if not (0 <= row < self.rows and 0 <= col < self.cols):
+            return False
+        
+        if self.revealed[row][col] or self.flagged[row][col]:
+            return False
+        
+        # Hit a mine - game over
+        if self.board[row][col] == 'M':
+            self.state = 'lost'
+            self.revealed[row][col] = True
+            return False
+        
+        # Reveal the cell
+        self.revealed[row][col] = True
+        
+        # If it's a 0, reveal all adjacent cells (flood fill)
+        if self.board[row][col] == 0:
+            self._flood_fill(row, col)
+        
+        # Check if player won
+        if self._check_win():
+            self.state = 'won'
+        
+        return True
+    
+    def _flood_fill(self, row, col):
+        """Reveal all adjacent cells if current cell is 0"""
+        for i in range(max(0, row - 1), min(self.rows, row + 2)):
+            for j in range(max(0, col - 1), min(self.cols, col + 2)):
+                if not self.revealed[i][j] and not self.flagged[i][j]:
+                    self.revealed[i][j] = True
+                    if self.board[i][j] == 0:
+                        self._flood_fill(i, j)
+    
+    def _check_win(self):
+        """Check if player has won (all non-mine cells revealed)"""
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if self.board[i][j] != 'M' and not self.revealed[i][j]:
+                    return False
+        return True
+    
+    def flag_cell(self, row, col):
+        """Toggle flag on a cell (right click)"""
+        if not (0 <= row < self.rows and 0 <= col < self.cols):
+            return False
+        
+        if self.revealed[row][col]:
+            return False
+        
+        self.flagged[row][col] = not self.flagged[row][col]
+        return True
+    
+    def to_dict(self):
+        """Convert game to JSON-serializable dict"""
+        return {
+            'id': self.id,
+            'board': self._get_display_board(),
+            'state': self.state,
+            'difficulty': self.difficulty
+        }
+
+
+# API ENDPOINTS
+
+@app.route('/games', methods=['POST'])
+def create_game():
+    """Create a new game"""
+    data = request.get_json()
+    difficulty = data.get('difficulty', 0)
+    
+    # Validate difficulty
+    if difficulty not in DIFFICULTIES:
+        difficulty = 0
+    
+    game = MinesweeperGame(difficulty)
+    games[game.id] = game
+    
+    return jsonify(game.to_dict()), 201
+
+
+@app.route('/games/<game_id>/check', methods=['POST'])
+def check_cell(game_id):
+    """Check/reveal a cell"""
+    if game_id not in games:
+        return jsonify({'error': 'Game not found'}), 404
+    
+    data = request.get_json()
+    row = data.get('row')
+    col = data.get('col')
+    
+    if row is None or col is None:
+        return jsonify({'error': 'Missing row or col'}), 400
+    
+    game = games[game_id]
+    game.check_cell(row, col)
+    
+    return jsonify(game.to_dict()), 200
+
+
+@app.route('/games/<game_id>/flag', methods=['POST'])
+def flag_cell(game_id):
+    """Flag/unflag a cell"""
+    if game_id not in games:
+        return jsonify({'error': 'Game not found'}), 404
+    
+    data = request.get_json()
+    row = data.get('row')
+    col = data.get('col')
+    
+    if row is None or col is None:
+        return jsonify({'error': 'Missing row or col'}), 400
+    
+    game = games[game_id]
+    game.flag_cell(row, col)
+    
+    return jsonify(game.to_dict()), 200
+
+
+@app.route('/games/<game_id>', methods=['GET'])
+def get_game(game_id):
+    """Get current game state"""
+    if game_id not in games:
+        return jsonify({'error': 'Game not found'}), 404
+    
+    game = games[game_id]
+    return jsonify(game.to_dict()), 200
+
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    """Health check endpoint"""
+    return jsonify({'status': 'ok'}), 200
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)

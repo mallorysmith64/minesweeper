@@ -2,27 +2,39 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import Cell from './Cell'
 
+// Change this to your backend URL
+const API_BASE_URL = 'http://localhost:5000'
+
 export class GameBoard extends Component {
   state = {
     board: [],
     difficulty: 0,
     id: 0,
     message: '',
-    status: ''
+    state: 'playing'
   }
 
   //call api to make game
   makeGame = async (difficulty = 0) => {
-    const result = await axios.post(
-      `https://minesweeper-api.herokuapp.com/games`,
-      { difficulty: difficulty }
-    )
-    this.setState({
-      board: result.data.board,
-      id: result.data.id,
-      difficulty: difficulty
-    })
-    console.log('start game', result)
+    try {
+      const result = await axios.post(
+        `${API_BASE_URL}/games`,
+        { difficulty: difficulty }
+      )
+      this.setState({
+        board: result.data.board,
+        id: result.data.id,
+        difficulty: difficulty,
+        state: result.data.state,
+        message: ''
+      })
+      console.log('start game', result)
+    } catch (error) {
+      console.error('Error creating game:', error)
+      this.setState({
+        message: 'Error connecting to server. Make sure backend is running!'
+      })
+    }
   }
 
   componentDidMount() {
@@ -30,62 +42,68 @@ export class GameBoard extends Component {
   }
 
   setDifficulty = async difficulty => {
-    this.setState({ difficulty: difficulty }, this.makeGame)
-    console.log('difficulty', difficulty)
+    this.setState({ difficulty: difficulty })
     this.makeGame(difficulty)
   }
 
   //api call for left click/checks
   apiCheckGame = async (x, y) => {
-    const result = await axios.post(
-      `https://minesweeper-api.herokuapp.com/games/${this.state.id}/check`,
-      {
-        row: x,
-        col: y
-      }
-    )
-    console.log('checked', result)
-    this.setState({
-      board: result.data.board,
-      state: result.data.state
-    })
-    console.log(this.state.state) //2nd state found in the console
-    this.gameResults()
+    try {
+      const result = await axios.post(
+        `${API_BASE_URL}/games/${this.state.id}/check`,
+        {
+          row: x,
+          col: y
+        }
+      )
+      console.log('checked', result)
+      this.setState({
+        board: result.data.board,
+        state: result.data.state
+      })
+      this.gameResults(result.data.state)
+    } catch (error) {
+      console.error('Error checking cell:', error)
+    }
   }
 
   //api call for right click/flags
   apiFlagGame = async (x, y) => {
-    const result = await axios.post(
-      `https://minesweeper-api.herokuapp.com/games/${this.state.id}/flag`,
-      {
-        row: x,
-        col: y
-      }
-    )
-    console.log(x, y)
-    this.setState({
-      board: result.data.board
-    })
-    console.log('flagged', result)
+    try {
+      const result = await axios.post(
+        `${API_BASE_URL}/games/${this.state.id}/flag`,
+        {
+          row: x,
+          col: y
+        }
+      )
+      console.log('flagged', result)
+      this.setState({
+        board: result.data.board
+      })
+    } catch (error) {
+      console.error('Error flagging cell:', error)
+    }
   }
 
   resetGame = () => {
-    this.makeGame(0)
+    this.makeGame(this.state.difficulty)
   }
 
-  gameResults = async () => {
-    if (this.state.status === 'lost') {
+  gameResults = (gameState) => {
+    if (gameState === 'lost') {
       this.setState({
-        message: 'You lost!'
+        message: 'You lost! 💣'
       })
-    } else if (this.state.status === 'won') {
+    } else if (gameState === 'won') {
       this.setState({
-        message: 'You win!'
+        message: 'You win! 🎉'
       })
-    } else
+    } else {
       this.setState({
         message: 'Keep playing!'
       })
+    }
   }
 
   render() {
@@ -95,7 +113,7 @@ export class GameBoard extends Component {
           <h1>Bomb Sniffer!</h1>
         </nav>
         <section className="choose-difficulty">
-          <h3> Choose your difficulty</h3>
+          <h3>Choose your difficulty</h3>
         </section>
         <section className="difficulty-btn">
           <button
@@ -117,11 +135,11 @@ export class GameBoard extends Component {
               this.setDifficulty(2)
             }}
           >
-            Hard mode
+            Hard Mode
           </button>
         </section>
         <section className="game-over">
-          <h2>{this.state.state}</h2>
+          <h2>{this.state.message}</h2>
         </section>
         <section className="reset-btn">
           <li>
