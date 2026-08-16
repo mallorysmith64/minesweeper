@@ -1,6 +1,20 @@
 {
-  "private": true,
   "name": "minesweeper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "**Welcome to Minesweeper!** :smiley:",
+  "homepage": "https://minesweeper-mallorysmith64.netlify.com",
+  "bugs": {
+    "url": "https://github.com/mallorysmith64/minesweeper/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mallorysmith64/minesweeper.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -11,18 +25,6 @@
     "eject": "react-scripts eject",
     "postdeploy": "echo 'Your site was deployed to https://minesweeper-mallorysmith64.netlify.com'"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
-  "devDependencies": {
-    "baseline-browser-mapping": "^2.11.14",
-    "react-scripts": "^5.0.1",
-    "stylelint": "^10.1.0",
-    "stylelint-config-standard": "^18.3.0"
-  },
   "dependencies": {
     "axios": "^0.21.1",
     "json": "^10.0.0",
@@ -30,17 +32,16 @@
     "react-dom": "^16.9.0",
     "serialize-javascript": "^3.1.0"
   },
-  "homepage": "https://minesweeper-mallorysmith64.netlify.com",
-  "description": "**Welcome to Minesweeper!** :smiley:",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mallorysmith64/minesweeper.git"
+  "devDependencies": {
+    "baseline-browser-mapping": "^2.11.14",
+    "react-scripts": "^5.0.1",
+    "stylelint": "^10.1.0",
+    "stylelint-config-standard": "^18.3.0"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mallorysmith64/minesweeper/issues"
-  }
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
