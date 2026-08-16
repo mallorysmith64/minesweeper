@@ -13,6 +13,15 @@ DIFFICULTIES = {
     2: (16, 16, 100)    # Hard
 }
 
+# Fraction of mines on each difficulty that are volatile "chain mines" -
+# hitting one detonates its neighbors too, and the reaction keeps
+# spreading through any chain mines it touches.
+CHAIN_MINE_RATIO = {
+    0: 0.10,   # Easy - rare, low-stakes intro to the mechanic
+    1: 0.15,   # Medium
+    2: 0.25    # Hard - riskier, not just bigger
+}
+
 # Store active games in memory
 games = {}
 
@@ -37,6 +46,8 @@ class MinesweeperGame:
         
         # Place mines
         self._place_mines()
+        # Pick which mines are volatile "chain mines"
+        self.chain_mines = self._select_chain_mines()
         # Calculate numbers
         self._calculate_numbers()
     
@@ -49,6 +60,18 @@ class MinesweeperGame:
             if self.board[row][col] != 'M':
                 self.board[row][col] = 'M'
                 mines_placed += 1
+
+    def _select_chain_mines(self):
+        """Pick a subset of the placed mines to be volatile chain mines."""
+        mine_cells = [
+            (r, c)
+            for r in range(self.rows)
+            for c in range(self.cols)
+            if self.board[r][c] == 'M'
+        ]
+        ratio = CHAIN_MINE_RATIO.get(self.difficulty, 0.15)
+        num_chain = max(1, round(len(mine_cells) * ratio))
+        return set(random.sample(mine_cells, num_chain))
     
     def _calculate_numbers(self):
         """Calculate numbers for non-mine cells"""
@@ -98,6 +121,8 @@ class MinesweeperGame:
         if self.board[row][col] == 'M':
             self.state = 'lost'
             self.revealed[row][col] = True
+            if (row, col) in self.chain_mines:
+                self._detonate_chain(row, col)
             return False
         
         # Reveal the cell
@@ -121,6 +146,25 @@ class MinesweeperGame:
                     self.revealed[i][j] = True
                     if self.board[i][j] == 0:
                         self._flood_fill(i, j)
+
+    def _detonate_chain(self, row, col):
+        """Spread outward from a chain mine, revealing (exploding) any
+        mine it touches. If that mine is also a chain mine, the
+        explosion keeps propagating from there. Regular mines catch
+        the blast but don't pass it on."""
+        frontier = [(row, col)]
+        visited = {(row, col)}
+        while frontier:
+            r, c = frontier.pop()
+            for i in range(max(0, r - 1), min(self.rows, r + 2)):
+                for j in range(max(0, c - 1), min(self.cols, c + 2)):
+                    if (i, j) in visited:
+                        continue
+                    visited.add((i, j))
+                    if self.board[i][j] == 'M':
+                        self.revealed[i][j] = True
+                        if (i, j) in self.chain_mines:
+                            frontier.append((i, j))
     
     def _check_win(self):
         """Check if player has won (all non-mine cells revealed)"""
