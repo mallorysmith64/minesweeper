@@ -111,6 +111,9 @@ class MinesweeperGame:
     
     def check_cell(self, row, col):
         """Reveal a cell (left click)"""
+        if self.state != 'playing':
+            return False
+
         if not (0 <= row < self.rows and 0 <= col < self.cols):
             return False
         
@@ -176,6 +179,9 @@ class MinesweeperGame:
     
     def flag_cell(self, row, col):
         """Toggle flag on a cell (right click)"""
+        if self.state != 'playing':
+            return False
+
         if not (0 <= row < self.rows and 0 <= col < self.cols):
             return False
         
