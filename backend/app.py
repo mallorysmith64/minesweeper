@@ -43,6 +43,7 @@ class MinesweeperGame:
         self.revealed = [[False for _ in range(cols)] for _ in range(rows)]
         self.flagged = [[False for _ in range(cols)] for _ in range(rows)]
         self.state = 'playing'
+        self.click_count = 0
         
         # Place mines
         self._place_mines()
@@ -72,6 +73,35 @@ class MinesweeperGame:
         ratio = CHAIN_MINE_RATIO.get(self.difficulty, 0.15)
         num_chain = max(1, round(len(mine_cells) * ratio))
         return set(random.sample(mine_cells, num_chain))
+
+    def _relocate_mine(self, row, col):
+        """Move a mine off a just-clicked cell to somewhere safe, so it
+        doesn't count as a loss. Only used during the first-3-clicks
+        safety window. Avoids cells that are already revealed, so a
+        mine never silently lands under a spot the player has already
+        seen as safe."""
+        candidates = [
+            (r, c)
+            for r in range(self.rows)
+            for c in range(self.cols)
+            if self.board[r][c] != 'M'
+            and not self.revealed[r][c]
+            and (r, c) != (row, col)
+        ]
+        if not candidates:
+            return  # board too small/full of mines to relocate - keep as-is
+
+        new_row, new_col = random.choice(candidates)
+        self.board[new_row][new_col] = 'M'
+        self.board[row][col] = 0  # placeholder, corrected by recalculation below
+
+        # The mine keeps its chain-mine status as it moves
+        if (row, col) in self.chain_mines:
+            self.chain_mines.discard((row, col))
+            self.chain_mines.add((new_row, new_col))
+
+        # Mine positions changed, so every adjacency count needs redoing
+        self._calculate_numbers()
     
     def _calculate_numbers(self):
         """Calculate numbers for non-mine cells"""
@@ -101,7 +131,7 @@ class MinesweeperGame:
                 elif not self.revealed[i][j]:
                     row.append('□')
                 elif self.board[i][j] == 'M':
-                    row.append('💣')
+                    row.append('🌵' if (i, j) in self.chain_mines else '💣')
                 elif self.board[i][j] == 0:
                     row.append('0')
                 else:
@@ -120,6 +150,13 @@ class MinesweeperGame:
         if self.revealed[row][col] or self.flagged[row][col]:
             return False
         
+        self.click_count += 1
+
+        # Guarantee the player can't lose on any of their first 3 clicks,
+        # regardless of difficulty - move the mine elsewhere instead.
+        if self.board[row][col] == 'M' and self.click_count <= 3:
+            self._relocate_mine(row, col)
+
         # Hit a mine - game over
         if self.board[row][col] == 'M':
             self.state = 'lost'
@@ -145,7 +182,11 @@ class MinesweeperGame:
         """Reveal all adjacent cells if current cell is 0"""
         for i in range(max(0, row - 1), min(self.rows, row + 2)):
             for j in range(max(0, col - 1), min(self.cols, col + 2)):
-                if not self.revealed[i][j] and not self.flagged[i][j]:
+                if (
+                    not self.revealed[i][j]
+                    and not self.flagged[i][j]
+                    and self.board[i][j] != 'M'
+                ):
                     self.revealed[i][j] = True
                     if self.board[i][j] == 0:
                         self._flood_fill(i, j)

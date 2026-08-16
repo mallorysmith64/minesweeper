@@ -12,10 +12,10 @@ export class Cell extends Component {
     if (value.includes('flag') || value === '🚩' || value === 'f') {
       return 'cell flagged'
     }
-    if (value.includes('mine') || value === '💣' || value === 'm') {
+    if (value.includes('mine') || value === '💣' || value === '🌵' || value === 'm') {
       return 'cell mine'
     }
-    if (value === '' || value === 'hidden') {
+    if (value === '' || value === 'hidden' || value === '□') {
       return 'cell hidden'
     }
 
