@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Cell from './Cell'
+import '../index.css'
 
 // Change this to your backend URL
 const API_BASE_URL = 'http://localhost:5000'
@@ -147,30 +148,35 @@ export class GameBoard extends Component {
           </li>
         </section>
         <main className="table">
-          <table>
-            <tbody>
-              {this.state.board.map((col, i) => {
-                return (
-                  <tr key={i}>
-                    {col.map((row, j) => {
-                      return (
-                        <Cell
-                          key={j}
-                          display={this.state.board[i][j]}
-                          handleLeftClick={() => {
-                            this.apiCheckGame(i, j)
-                          }}
-                          handleRightClick={() => {
-                            this.apiFlagGame(i, j)
-                          }}
-                        />
-                      )
-                    })}
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+          <div
+            className="board"
+            style={{
+              gridTemplateColumns: `repeat(${
+                this.state.board[0] ? this.state.board[0].length : 0
+              }, 32px)`
+            }}
+          >
+            {this.state.board.map((col, i) => {
+              return (
+                <div className="board-row" key={i}>
+                  {col.map((row, j) => {
+                    return (
+                      <Cell
+                        key={j}
+                        display={this.state.board[i][j]}
+                        handleLeftClick={() => {
+                          this.apiCheckGame(i, j)
+                        }}
+                        handleRightClick={() => {
+                          this.apiFlagGame(i, j)
+                        }}
+                      />
+                    )
+                  })}
+                </div>
+              )
+            })}
+          </div>
         </main>
       </>
     )
