@@ -16,4 +16,5 @@ Cheers.
 Note: "yarn install is used to install all dependencies for a project.
 This is most commonly used when you have just checked out code for a project
 or when another developer on the project has added a new dependency that you need to pick up."
-Source: https://yarnpkg.com/en/docs/cli/install
+
+Source: <https://yarnpkg.com/en/docs/cli/install>
