@@ -13,6 +13,7 @@
   },
   "license": "ISC",
   "author": "",
+  "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
@@ -39,6 +40,9 @@
     "react-scripts": "^5.0.1",
     "stylelint": "^10.1.0",
     "stylelint-config-standard": "^18.3.0"
+  },
+  "engines": {
+    "node": "20.x"
   },
   "browserslist": [
     ">0.2%",
