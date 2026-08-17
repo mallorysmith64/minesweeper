@@ -3,8 +3,11 @@ import axios from 'axios'
 import Cell from './Cell'
 import '../index.css'
 
-// Change this to your backend URL
-const API_BASE_URL = 'http://localhost:5000'
+// Reads the backend URL from the environment at build time.
+// Locally, create a .env file with REACT_APP_API_URL=http://localhost:5000
+// On Railway, set REACT_APP_API_URL to your backend service's public URL
+// (Settings -> Networking -> Public Networking on the Flask service).
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000'
 
 export class GameBoard extends Component {
   state = {

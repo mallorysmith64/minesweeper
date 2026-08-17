@@ -4,7 +4,13 @@ import random
 import uuid
 
 app = Flask(__name__)
-CORS(app)
+
+# In production, set FRONTEND_URL on Railway to your frontend service's
+# public URL (e.g. https://your-frontend.up.railway.app). Falls back to
+# allowing all origins for local development.
+import os
+frontend_url = os.environ.get('FRONTEND_URL')
+CORS(app, origins=[frontend_url] if frontend_url else '*')
 
 # Game difficulties: (rows, cols, mines)
 DIFFICULTIES = {
