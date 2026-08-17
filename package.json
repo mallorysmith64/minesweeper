@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "**Welcome to Minesweeper!** :smiley:",
-  "homepage": "https://minesweeper-mallorysmith64.netlify.com",
+  "homepage": "https://minesweeper-2-frontend.up.railway.app/",
   "bugs": {
     "url": "https://github.com/mallorysmith64/minesweeper/issues"
   },
@@ -22,7 +22,7 @@
     "setup-deploy": "app-app --deploy && yarn deploy",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postdeploy": "echo 'Your site was deployed to https://minesweeper-mallorysmith64.netlify.com'",
+    "postdeploy": "echo 'Your site was deployed to https://minesweeper-2-frontend.up.railway.app/",
     "backend": "cd backend && ./.venv/bin/python3 app.py",
     "dev": "concurrently -n frontend,backend -c blue,green \"npm run start\" \"npm run backend\""
   },
