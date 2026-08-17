@@ -4,11 +4,10 @@ Objective: Use RESTful API for some of the game logic, display a message to show
 
 Technologies Used: React.js, Netlify, CSS Flexbox, HTML5
 
-Play minesweeper here: https://minesweeper-mallorysmith64.netlify.com/ </br>
-
 To run this project locally:
-git clone https://github.com/mallorysmith64/minesweeper.git </br>
+git clone </br>
 cd minesweeper </br>
+yarn init </br>
 yarn install </br>
 yarn start </br>
 
