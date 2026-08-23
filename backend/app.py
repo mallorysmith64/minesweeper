@@ -2,13 +2,13 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import random
 import uuid
+import os
 
 app = Flask(__name__)
 
-# In production, set FRONTEND_URL on Railway to your frontend service's
-# public URL (e.g. https://your-frontend.up.railway.app). Falls back to
-# allowing all origins for local development.
-import os
+# In production, set FRONTEND_URL to your frontend's public URL
+# (e.g. https://your-frontend-xyz.a.run.app). Falls back to allowing
+# all origins for local development.
 frontend_url = os.environ.get('FRONTEND_URL')
 CORS(app, origins=[frontend_url] if frontend_url else '*')
 
@@ -321,6 +321,5 @@ def health_check():
 
 
 if __name__ == '__main__':
-    import os
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 8080))
     app.run(debug=False, host='0.0.0.0', port=port)
