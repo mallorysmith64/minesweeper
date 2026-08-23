@@ -115,7 +115,7 @@ export class GameBoard extends Component {
     return (
       <>
         <nav className="page-title">
-          <h1>Bomb Sniffer!</h1>
+          <h1>Mine Express</h1>
         </nav>
         <section className="choose-difficulty">
           <h3>Choose your difficulty</h3>
