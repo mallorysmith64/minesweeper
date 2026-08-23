@@ -35,7 +35,7 @@ games = {}
 def hello_world():
     return "<p>Hello, World!</p>"
 
-class MinesweeperGame:
+class MineExpressGame:
     def __init__(self, difficulty=0):
         self.id = str(uuid.uuid4())
         self.difficulty = difficulty
@@ -260,7 +260,7 @@ def create_game():
     if difficulty not in DIFFICULTIES:
         difficulty = 0
     
-    game = MinesweeperGame(difficulty)
+    game = MineExpressGame(difficulty)
     games[game.id] = game
     
     return jsonify(game.to_dict()), 201
@@ -321,5 +321,5 @@ def health_check():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 8080))
+    port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
