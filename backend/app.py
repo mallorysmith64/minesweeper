@@ -1,14 +1,18 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import random
 import uuid
 import os
 
-app = Flask(__name__)
+# The Dockerfile copies the built React app into ./static (next to this
+# file), so Flask serves it directly. No separate frontend server/nginx
+# needed - one container, one process.
+app = Flask(__name__, static_folder='static', static_url_path='')
 
-# In production, set FRONTEND_URL to your frontend's public URL
-# (e.g. https://your-frontend-xyz.a.run.app). Falls back to allowing
-# all origins for local development.
+# Same-origin in production (frontend build is served by this same Flask
+# app), so CORS is only really needed for local dev where the React dev
+# server runs on a different port. Set FRONTEND_URL if you ever split
+# them back into two services.
 frontend_url = os.environ.get('FRONTEND_URL')
 CORS(app, origins=[frontend_url] if frontend_url else '*')
 
@@ -32,8 +36,20 @@ CHAIN_MINE_RATIO = {
 games = {}
 
 @app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+def index():
+    return send_from_directory(app.static_folder, 'index.html')
+
+
+@app.route('/<path:path>')
+def serve_static_or_index(path):
+    """Serve a built static asset if it exists (JS/CSS/images), otherwise
+    fall back to index.html so React Router (client-side routing) works
+    on refresh/direct links. API routes below are matched first since
+    Flask prefers the more specific rule."""
+    full_path = os.path.join(app.static_folder, path)
+    if os.path.isfile(full_path):
+        return send_from_directory(app.static_folder, path)
+    return send_from_directory(app.static_folder, 'index.html')
 
 class MineExpressGame:
     def __init__(self, difficulty=0):
