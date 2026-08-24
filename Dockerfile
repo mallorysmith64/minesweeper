@@ -31,6 +31,13 @@ COPY --from=frontend-build /frontend/build ./static
 ENV PORT=8080
 EXPOSE 8080
 
+# Single worker is required: game state lives in an in-memory Python dict
+# (see app.py `games = {}`), which is NOT shared across processes. Using
+# --workers > 1 forks separate processes with separate memory, so a game
+# created by one worker 404s when a later request lands on another worker.
+# --threads gives concurrency within that single process/shared memory
+# space instead, without this problem.
+#
 # JSON array form with an explicit shell + exec, so $PORT still expands
 # but gunicorn replaces the shell as PID 1 and receives signals directly
-CMD ["sh", "-c", "exec gunicorn app:app --bind 0.0.0.0:$PORT --workers 4 --timeout 120"]
+CMD ["sh", "-c", "exec gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 8 --timeout 120"]
