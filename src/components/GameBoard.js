@@ -175,13 +175,11 @@ export class GameBoard extends Component {
                     return (
                       <Cell
                         key={j}
+                        row={i}
+                        col={j}
                         display={this.state.board[i][j]}
-                        handleLeftClick={() => {
-                          this.apiCheckGame(i, j)
-                        }}
-                        handleRightClick={() => {
-                          this.apiFlagGame(i, j)
-                        }}
+                        onLeftClick={this.apiCheckGame}
+                        onRightClick={this.apiFlagGame}
                       />
                     )
                   })}
