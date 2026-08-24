@@ -5,10 +5,18 @@ import '../index.css'
 
 // Reads the backend URL from the environment at build time.
 // Locally, create a .env file with REACT_APP_API_URL=http://localhost:5000
-// In production, this is baked in at build time (see the frontend
-// Dockerfile) — set it to your Cloud Run backend service's URL, e.g.
-// https://minesweeper-backend-xxxxx-uc.a.run.app
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000'
+// so the React dev server (port 3000) can reach the Flask dev server
+// (port 5000).
+//
+// In production, the Dockerfile builds the React app and copies it into
+// the SAME container that runs Flask (see app.py: static_folder='static'),
+// so the frontend and API are served from one origin on Cloud Run. There
+// is no separate backend URL to bake in — an empty base URL means axios
+// requests like `${API_BASE_URL}/games` resolve to `/games` on whatever
+// origin the page was loaded from, which is exactly what's needed here.
+// Only set REACT_APP_API_URL if you actually split this into two deployed
+// services.
+const API_BASE_URL = process.env.REACT_APP_API_URL || ''
 
 export class GameBoard extends Component {
   state = {
